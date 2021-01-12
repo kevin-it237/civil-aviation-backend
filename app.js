@@ -7,7 +7,7 @@ const http = require('http');
 const path = require('path');
 
 
-
+const SPResponse = require('./api/models/SP_Response')
 
 // Connect to  mysql db 
 db.sequelize.sync({ alter: true });

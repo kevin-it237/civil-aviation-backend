@@ -5,7 +5,7 @@ const State = require('../models/State')
 router.get("/", (req, res, next) => {
     State.getAllStates()
     .then(data => {
-        res.send(data);
+        res.status(200).send(data);
     })
     .catch(err => {
         res.status(500).send({
@@ -15,20 +15,5 @@ router.get("/", (req, res, next) => {
     });
 });
 
-// Get a single KPI for all countries
-router.get("/kpis/:kpiId", (req, res, next) => {
-    const kpiId = req.params.kpiId
-
-    State.getKPIs(kpiId)
-    .then(data => {
-        res.send(data);
-    })
-    .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving tutorials."
-        });
-    });
-});
 
 module.exports = router;
