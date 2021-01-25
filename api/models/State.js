@@ -5,7 +5,11 @@ const sequelize = db.sequelize
 class State extends Sequelize.Model {
 
     static getAllStates() {
-      return State.findAll()
+      return State.findAll({
+        order: [
+            ['short_name', 'ASC']
+        ],
+      })
     }
 
     getFullname() {
