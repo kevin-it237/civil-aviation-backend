@@ -8,8 +8,8 @@ const SPResponse = db.sequelize.define("sp_response", {
     questionnaire_response: {
         type: Sequelize.BOOLEAN
     },
-    weigth: {
-        type: Sequelize.INTEGER 
+    weight_response: { 
+        type: Sequelize.INTEGER
     } 
 }); 
  

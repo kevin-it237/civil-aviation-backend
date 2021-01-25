@@ -14,6 +14,12 @@ const SurveyProtocol = db.sequelize.define("survey_protocol", {
     questionnaire_text: {
         type: Sequelize.STRING
     },
+    weight: {
+        type: Sequelize.INTEGER
+    },
+    SP_checklist_id: {
+        type: Sequelize.STRING
+    },
 });
 
 YDMS_KPIs.hasOne(SurveyProtocol);

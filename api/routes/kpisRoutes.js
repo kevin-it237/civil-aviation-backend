@@ -13,7 +13,7 @@ router.get("/:kpiId", (req, res, next) => {
 
     const queryPromise = 
     db.sequelize.query(
-        'SELECT states.country_code, organisations.short_name, organisations.YDMS_Org_id, SUM(sp_responses.weigth) as totalweight, SUM(sp_responses.questionnaire_response) as response, SUM((CASE WHEN sp_responses.questionnaire_response > 0 THEN sp_responses.weigth ELSE 0 END)) as weight FROM `survey_protocols`, `organisations`, `sp_responses`, `states` WHERE survey_protocols.YDMSKPIYDMSKPIsId=? AND sp_responses.organisationYDMSOrgId=organisations.YDMS_Org_id AND states.YDMS_AU_id=organisations.YDMS_Org_id AND sp_responses.surveyProtocolYDMSSPId=survey_protocols.YDMS_SP_id GROUP BY organisations.YDMS_Org_id',
+        'SELECT states.country_code, organisations.short_name, organisations.YDMS_Org_id, SUM(survey_protocols.weight) as totalweight, SUM(sp_responses.questionnaire_response) as response, SUM((CASE WHEN sp_responses.questionnaire_response > 0 THEN survey_protocols.weight ELSE 0 END)) as weight, COUNT(*) as totalSP FROM `survey_protocols`, `organisations`, `sp_responses`, `states` WHERE survey_protocols.YDMSKPIYDMSKPIsId=? AND sp_responses.organisationYDMSOrgId=organisations.YDMS_Org_id AND states.YDMS_AU_id=organisations.YDMS_Org_id AND sp_responses.surveyProtocolYDMSSPId=survey_protocols.YDMS_SP_id GROUP BY organisations.YDMS_Org_id',
         {
           replacements: [kpiId],
           type: QueryTypes.SELECT
