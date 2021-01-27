@@ -9,7 +9,7 @@ const SPResponse = db.sequelize.define("sp_response", {
         type: Sequelize.BOOLEAN
     },
     weight_response: { 
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
     } 
 }); 
  
