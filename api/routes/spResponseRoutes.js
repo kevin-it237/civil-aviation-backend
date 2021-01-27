@@ -64,10 +64,7 @@ router.get("/:orgId", (req, res, next) => {
             organisationYDMSOrgId: orgId
         }
     }).then(responses => {
-        return res.status(201).send({
-            data: responses,
-            message: "Organisation responses succesfully fetched"
-        });
+        return res.status(201).send(responses);
     })
     .catch(err => {
         res.status(500).send({ message: err.message });
