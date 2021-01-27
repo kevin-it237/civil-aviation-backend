@@ -54,4 +54,24 @@ router.post("/", (req, res, next) => {
     });
 });
 
+// Questions anwsered by an org
+router.get("/:orgId", (req, res, next) => {
+
+    const orgId = req.params.orgId
+    
+    SPResponse.findAll({
+        where: {
+            organisationYDMSOrgId: orgId
+        }
+    }).then(responses => {
+        return res.status(201).send({
+            data: responses,
+            message: "Organisation responses succesfully fetched"
+        });
+    })
+    .catch(err => {
+        res.status(500).send({ message: err.message });
+    });;
+});
+
 module.exports = router;
