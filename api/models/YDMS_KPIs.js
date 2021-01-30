@@ -10,7 +10,7 @@ const YDMS_KPIs = db.sequelize.define("YDMS_KPIs", {
         type: Sequelize.STRING
     },
     KPIs_text: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
     },
     KPIs_org_type: {
         type: Sequelize.STRING 

@@ -12,7 +12,7 @@ const SurveyProtocol = db.sequelize.define("survey_protocol", {
         type: Sequelize.STRING
     },
     questionnaire_text: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
     },
     weight: {
         type: Sequelize.INTEGER
