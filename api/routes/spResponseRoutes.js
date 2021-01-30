@@ -3,18 +3,18 @@ const SPResponse = require('../models/SP_Response')
 
 // Save question response
 router.post("/", (req, res, next) => {
-
     if (!req.body.YDMS_Org_id) {
         return res.status(401).send({
             message: "YDMS_Org_id field not found!"
         });
     }
+
     if(!req.body.YDMS_SP_id) {
         return res.status(401).send({
             message: "YDMS_SP_id field not found!"
         });
     }
-    if(!req.body.response) {
+    if(!req.body.response.toString().length) {
         return res.status(401).send({
             message: "response field not found!"
         });
