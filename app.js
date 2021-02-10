@@ -48,6 +48,7 @@ const stateRoutes = require('./api/routes/statesRoutes');
 const kpisRoutes = require('./api/routes/kpisRoutes');
 const questionnaireRoutes = require('./api/routes/surveyProtocolRoutes');
 const spResponsesRoutes = require('./api/routes/spResponseRoutes');
+const orgsRoutes = require('./api/routes/orgsRoutes');
 
 /* App Routes */
 app.use('/api/auth', authRoutes);
@@ -55,6 +56,7 @@ app.use('/api/states', stateRoutes);
 app.use('/api/kpis', kpisRoutes);
 app.use('/api/questionnaire', questionnaireRoutes);
 app.use('/api/response', spResponsesRoutes);
+app.use('/api/organisations', orgsRoutes);
 
 app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
