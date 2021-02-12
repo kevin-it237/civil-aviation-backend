@@ -7,7 +7,7 @@ const SurveyProtocol = require('../models/SurveyProtocol')
 const Organisation = require('../models/Organisation')
 const YDMS_KPIs = require('../models/YDMS_KPIs')
 
-// Get a single KPI
+// Get a single KPI data
 router.get("/:kpiId", (req, res, next) => {
     const kpiId = req.params.kpiId
 
@@ -50,6 +50,31 @@ router.get("/:kpiId", (req, res, next) => {
     //         err.message || "Some error occurred while retrieving tutorials."
     //     });
     // });
+});
+
+// Get a single KPI data for Afcac
+router.get("/afcac/:kpiId", (req, res, next) => {
+    const kpiId = req.params.kpiId
+
+    const queryPromise = 
+    db.sequelize.query(
+        'SELECT organisations.short_name, organisations.YDMS_Org_id, sp_responses.questionnaire_response, survey_protocols.questionnaire_text, survey_protocols.weight FROM `survey_protocols`, `organisations`, `sp_responses` WHERE survey_protocols.YDMSKPIYDMSKPIsId=? AND sp_responses.organisationYDMSOrgId=organisations.YDMS_Org_id AND sp_responses.surveyProtocolYDMSSPId=survey_protocols.YDMS_SP_id',
+        {
+          replacements: [kpiId],
+          type: QueryTypes.SELECT
+        }
+    );
+
+    queryPromise
+    .then(data => {
+        res.status(200).send(data);
+    })
+    .catch(err => {
+        res.status(500).send({
+        message:
+            err.message || "Some error occurred while retrieving KPIs datas."
+        });
+    });
 });
 
 // KPIs listing
