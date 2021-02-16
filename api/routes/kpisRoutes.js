@@ -6,17 +6,47 @@ const Op = db.Sequelize.Op
 const SurveyProtocol = require('../models/SurveyProtocol')
 const Organisation = require('../models/Organisation')
 const YDMS_KPIs = require('../models/YDMS_KPIs')
+const SP_Response = require('../models/SP_Response')
+const State = require('../models/State')
 
 // Get a single KPI data
 router.get("/:kpiId", (req, res, next) => {
     const kpiId = req.params.kpiId
 
+    // Organisation.findAll({ 
+    //     // attributes: ['YDMS_SP_id', 'YDMSKPIYDMSKPIsId'],
+    //     include: [
+    //         {
+    //             model: SurveyProtocol,
+    //             where: {
+    //                 YDMSKPIYDMSKPIsId: {
+    //                     [Op.eq]: kpiId
+    //                 }
+    //             }
+    //         }
+    //     ]
+    // })
+    // .then(data => {
+    //     res.send(data);
+    // })
+    // .catch(err => {
+    //     res.status(500).send({
+    //       message:
+    //         err.message || "Some error occurred while retrieving tutorials."
+    //     });
+    // });
+
+    let query = 'SELECT states.country_code, organisations.short_name, organisations.YDMS_Org_id, SUM(survey_protocols.weight) as totalweight, SUM(sp_responses.weight_response) as custom_weight, SUM(sp_responses.questionnaire_response) as response, SUM((CASE WHEN sp_responses.questionnaire_response > 0 THEN survey_protocols.weight ELSE 0 END)) as weight, COUNT(*) as totalSP FROM `survey_protocols`, `organisations`, `sp_responses`, `states` WHERE survey_protocols.YDMSKPIYDMSKPIsId=? AND sp_responses.organisationYDMSOrgId=organisations.YDMS_Org_id AND states.YDMS_AU_id=organisations.YDMS_Org_id AND sp_responses.surveyProtocolYDMSSPId=survey_protocols.YDMS_SP_id GROUP BY organisations.YDMS_Org_id'
+    
+    if(kpiId === 'kpi_4') {
+        query = 'SELECT survey_protocols.questionnaire_text, states.country_code, organisations.short_name, organisations.YDMS_Org_id, sp_responses.weight_response, sp_responses.questionnaire_response FROM `survey_protocols`, `organisations`, `sp_responses`, `states` WHERE survey_protocols.YDMSKPIYDMSKPIsId=? AND sp_responses.organisationYDMSOrgId=organisations.YDMS_Org_id AND states.YDMS_AU_id=organisations.YDMS_Org_id AND sp_responses.surveyProtocolYDMSSPId=survey_protocols.YDMS_SP_id'
+    }
+
     const queryPromise = 
-    db.sequelize.query(
-        'SELECT states.country_code, organisations.short_name, organisations.YDMS_Org_id, SUM(survey_protocols.weight) as totalweight, SUM(sp_responses.weight_response) as custom_weight, SUM(sp_responses.questionnaire_response) as response, SUM((CASE WHEN sp_responses.questionnaire_response > 0 THEN survey_protocols.weight ELSE 0 END)) as weight, COUNT(*) as totalSP FROM `survey_protocols`, `organisations`, `sp_responses`, `states` WHERE survey_protocols.YDMSKPIYDMSKPIsId=? AND sp_responses.organisationYDMSOrgId=organisations.YDMS_Org_id AND states.YDMS_AU_id=organisations.YDMS_Org_id AND sp_responses.surveyProtocolYDMSSPId=survey_protocols.YDMS_SP_id GROUP BY organisations.YDMS_Org_id',
+    db.sequelize.query(query,
         {
-          replacements: [kpiId],
-          type: QueryTypes.SELECT
+            replacements: [kpiId],
+            type: QueryTypes.SELECT
         }
     );
 
@@ -30,26 +60,6 @@ router.get("/:kpiId", (req, res, next) => {
             err.message || "Some error occurred while retrieving KPIs datas."
         });
     });
-    // SurveyProtocol.findAll({ 
-    //     // attributes: ['YDMS_SP_id', 'YDMSKPIYDMSKPIsId'],
-    //     include: {
-    //         model: Organisation,
-    //     },
-    //     where: {
-    //         YDMSKPIYDMSKPIsId: {
-    //             [Op.eq]: kpiId
-    //         }
-    //     }
-    // })
-    // .then(data => {
-    //     res.send(data);
-    // })
-    // .catch(err => {
-    //     res.status(500).send({
-    //       message:
-    //         err.message || "Some error occurred while retrieving tutorials."
-    //     });
-    // });
 });
 
 // Get a single KPI data for Afcac
