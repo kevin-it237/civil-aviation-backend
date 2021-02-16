@@ -10,6 +10,9 @@ const SPResponse = db.sequelize.define("sp_response", {
     },
     weight_response: { 
         type: Sequelize.FLOAT
+    },
+    kpi_id: { 
+        type: Sequelize.STRING
     } 
 }); 
  
