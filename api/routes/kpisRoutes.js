@@ -13,29 +13,6 @@ const State = require('../models/State')
 router.get("/:kpiId", (req, res, next) => {
     let kpiId = req.params.kpiId
 
-    // Organisation.findAll({ 
-    //     // attributes: ['YDMS_SP_id', 'YDMSKPIYDMSKPIsId'],
-    //     include: [
-    //         {
-    //             model: SurveyProtocol,
-    //             where: {
-    //                 YDMSKPIYDMSKPIsId: {
-    //                     [Op.eq]: kpiId
-    //                 }
-    //             }
-    //         }
-    //     ]
-    // })
-    // .then(data => {
-    //     res.send(data);
-    // })
-    // .catch(err => {
-    //     res.status(500).send({
-    //       message:
-    //         err.message || "Some error occurred while retrieving tutorials."
-    //     });
-    // });
-
     let query = 'SELECT states.country_code, organisations.short_name, organisations.YDMS_Org_id, SUM(survey_protocols.weight) as totalweight, SUM(sp_responses.weight_response) as custom_weight, SUM(sp_responses.questionnaire_response) as response, SUM((CASE WHEN sp_responses.questionnaire_response > 0 THEN survey_protocols.weight ELSE 0 END)) as weight, COUNT(*) as totalSP FROM `survey_protocols`, `organisations`, `sp_responses`, `states` WHERE survey_protocols.YDMSKPIYDMSKPIsId=? AND sp_responses.organisationYDMSOrgId=organisations.YDMS_Org_id AND states.YDMS_AU_id=organisations.YDMS_Org_id AND sp_responses.surveyProtocolYDMSSPId=survey_protocols.YDMS_SP_id GROUP BY organisations.YDMS_Org_id'
 
     if(kpiId === 'kpi_5') kpiId = 'kpi_4'
@@ -93,25 +70,49 @@ router.get("/afcac/:kpiId", (req, res, next) => {
 router.get("/summary/:orgType", (req, res, next) => {
     const orgType = req.params.orgType
 
-    const queryPromise = 
-    db.sequelize.query(
-        'SELECT ydms_kpis.YDMS_KPIs_id, ydms_kpis.KPIs_label, SUM(survey_protocols.weight) as totalweight, SUM(sp_responses.weight_response) as custom_weight, SUM(sp_responses.questionnaire_response) as response, SUM((CASE WHEN sp_responses.questionnaire_response > 0 THEN survey_protocols.weight ELSE 0 END)) as weight, COUNT(*) as totalSP FROM `survey_protocols`, `ydms_kpis`, `sp_responses` WHERE survey_protocols.YDMSKPIYDMSKPIsId=ydms_kpis.YDMS_KPIs_id AND survey_protocols.YDMS_SP_Id=sp_responses.surveyProtocolYDMSSPId AND ydms_kpis.KPIs_org_type=? GROUP BY survey_protocols.YDMSKPIYDMSKPIsId',
-        {
-          replacements: [orgType],
-          type: QueryTypes.SELECT
-        }
-    );
-
-    queryPromise
-    .then(data => {
-        res.send(data);
-    })
-    .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving datas"
+    if(orgType === 'afcac') {
+        let query = 'SELECT ydms_kpis.YDMS_KPIs_id, ydms_kpis.KPIs_label, SUM(survey_protocols.weight) as totalweight, SUM(sp_responses.weight_response) as custom_weight, SUM(sp_responses.questionnaire_response) as response, SUM((CASE WHEN sp_responses.questionnaire_response > 0 THEN survey_protocols.weight ELSE 0 END)) as weight, COUNT(*) as totalSP FROM `survey_protocols`, `ydms_kpis`, `sp_responses` WHERE survey_protocols.YDMSKPIYDMSKPIsId=ydms_kpis.YDMS_KPIs_id AND survey_protocols.YDMS_SP_Id=sp_responses.surveyProtocolYDMSSPId AND ydms_kpis.KPIs_org_type=? GROUP BY survey_protocols.YDMSKPIYDMSKPIsId'
+        
+        const queryPromise = db.sequelize.query(query,
+            {
+              replacements: [orgType],
+              type: QueryTypes.SELECT
+            }
+        );
+        queryPromise
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+              message:
+                err.message || "Some error occurred while retrieving datas"
+            });
         });
-    });
+    } else if(orgType === 'state') {
+            Organisation.findAll({ 
+            // attributes: ['YDMS_SP_id', 'YDMSKPIYDMSKPIsId'],
+            include: [
+                {
+                    model: SurveyProtocol,
+                    where: {
+                        // YDMSKPIYDMSKPIsId: {
+                        //     [Op.eq]: kpiId
+                        // }
+                    }
+                }
+            ],
+        })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+            message:
+                err.message || "Some error occurred while retrieving state datas."
+            });
+        });
+    }
 });
 
 // KPIs listing
