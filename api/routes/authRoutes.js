@@ -64,6 +64,7 @@ router.post("/signin", (req, res) => {
             username: user.username,
             email: user.email,
             role: user.role,
+            orgId: user.orgId,
             accessToken: token,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
