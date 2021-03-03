@@ -74,4 +74,26 @@ router.post("/signin", (req, res) => {
     });
 });
 
+router.put("/users", (req, res) => {
+    // Update User to Database
+    User.create(
+        { password: bcrypt.hashSync(req.body.password, 8) }, 
+        {  where : { username: req.body.username }}
+    )
+    .then(user => {
+        res.status(200).send({ 
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+            orgId: user.orgId,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+            message: "User was successfully updated!" });
+    })
+    .catch(err => {
+        res.status(500).send({ message: err.message });
+    });
+});
+
 module.exports = router;
