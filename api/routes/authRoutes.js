@@ -13,7 +13,8 @@ router.post("/register", verifySignUp.checkDuplicateUsernameOrEmail, (req, res) 
         username: req.body.username,
         email: req.body.email,
         role: "user",
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: bcrypt.hashSync(req.body.password, 8),
+        orgId: req.body.orgId
     })
     .then(user => {
         res.status(200).send({ 
@@ -21,6 +22,7 @@ router.post("/register", verifySignUp.checkDuplicateUsernameOrEmail, (req, res) 
             username: user.username,
             email: user.email,
             role: user.role,
+            orgId: user.orgId,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
             message: "User was registered successfully!" });
