@@ -29,7 +29,9 @@ router.get("/:kpiId", authJwt.verifyToken, (req, res, next) => {
     if(kpiId === 'kpi_4') {
         query = 'SELECT survey_protocols.questionnaire_text, states.country_code, organisations.short_name, organisations.YDMS_Org_id, sp_responses.weight_response, sp_responses.questionnaire_response FROM `survey_protocols`, `organisations`, `sp_responses`, `states` WHERE survey_protocols.YDMSKPIYDMSKPIsId=? AND sp_responses.organisationYDMSOrgId=organisations.YDMS_Org_id AND states.YDMS_AU_id=organisations.YDMS_Org_id AND sp_responses.surveyProtocolYDMSSPId=survey_protocols.YDMS_SP_id'
         // For state || just add this: organisations.YDMS_Org_id=?
-        query = 'SELECT survey_protocols.questionnaire_text, states.country_code, organisations.short_name, organisations.YDMS_Org_id, sp_responses.weight_response, sp_responses.questionnaire_response FROM `survey_protocols`, `organisations`, `sp_responses`, `states` WHERE survey_protocols.YDMSKPIYDMSKPIsId=? AND sp_responses.organisationYDMSOrgId=organisations.YDMS_Org_id AND states.YDMS_AU_id=organisations.YDMS_Org_id AND sp_responses.surveyProtocolYDMSSPId=survey_protocols.YDMS_SP_id AND organisations.YDMS_Org_id=?'
+        if(role !== 'admin') {
+            query = 'SELECT survey_protocols.questionnaire_text, states.country_code, organisations.short_name, organisations.YDMS_Org_id, sp_responses.weight_response, sp_responses.questionnaire_response FROM `survey_protocols`, `organisations`, `sp_responses`, `states` WHERE survey_protocols.YDMSKPIYDMSKPIsId=? AND sp_responses.organisationYDMSOrgId=organisations.YDMS_Org_id AND states.YDMS_AU_id=organisations.YDMS_Org_id AND sp_responses.surveyProtocolYDMSSPId=survey_protocols.YDMS_SP_id AND organisations.YDMS_Org_id=?'
+        }
     }
 
     const queryPromise = 
