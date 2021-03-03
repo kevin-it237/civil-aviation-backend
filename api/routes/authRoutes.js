@@ -76,7 +76,7 @@ router.post("/signin", (req, res) => {
 
 router.put("/users", (req, res) => {
     // Update User to Database
-    User.create(
+    User.update(
         { password: bcrypt.hashSync(req.body.password, 8) }, 
         {  where : { username: req.body.username }}
     )
