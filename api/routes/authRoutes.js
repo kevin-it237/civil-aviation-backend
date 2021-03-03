@@ -55,7 +55,7 @@ router.post("/signin", (req, res) => {
             });
         }
 
-        var token = jwt.sign({ id: user.id }, config.secret, {
+        var token = jwt.sign({ id: user.id, role: user.role }, config.secret, {
             expiresIn: 86400*365 // one year
         });
 

@@ -3,7 +3,8 @@ const config = require("../../config/auth.config");
 const User = require('../models/User')
 
 verifyToken = (req, res, next) => {
-    let token = req.headers.authorization;
+    let token = req.headers.authorization.split(' ')[1];
+    let orgId = req.headers.orgid;
 
     if (!token) {
         return res.status(403).send({
@@ -18,6 +19,8 @@ verifyToken = (req, res, next) => {
             });
         }
         req.userId = decoded.id;
+        req.role = decoded.role;
+        req.orgId = orgId;
         next();
     });
 };
