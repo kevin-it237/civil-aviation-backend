@@ -12,7 +12,7 @@ router.post("/register", verifySignUp.checkDuplicateUsernameOrEmail, (req, res) 
     User.create({
         username: req.body.username,
         email: req.body.email,
-        role: "user",
+        role: req.body.role,
         password: bcrypt.hashSync(req.body.password, 8),
         orgId: req.body.orgId
     })
