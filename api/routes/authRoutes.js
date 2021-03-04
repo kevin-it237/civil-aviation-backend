@@ -90,6 +90,7 @@ router.put("/users", (req, res) => {
             username: user.username,
             email: user.email,
             role: user.role,
+            short_name: user.short_name,
             orgId: user.orgId,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
