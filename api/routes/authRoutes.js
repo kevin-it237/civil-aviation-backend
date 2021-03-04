@@ -13,6 +13,7 @@ router.post("/register", verifySignUp.checkDuplicateUsernameOrEmail, (req, res) 
         username: req.body.username,
         email: req.body.email,
         role: req.body.role,
+        short_name: req.body.short_name,
         password: bcrypt.hashSync(req.body.password, 8),
         orgId: req.body.orgId
     })
@@ -22,6 +23,7 @@ router.post("/register", verifySignUp.checkDuplicateUsernameOrEmail, (req, res) 
             username: user.username,
             email: user.email,
             role: user.role,
+            short_name: user.short_name,
             orgId: user.orgId,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
@@ -64,6 +66,7 @@ router.post("/signin", (req, res) => {
             username: user.username,
             email: user.email,
             role: user.role,
+            short_name: user.short_name,
             orgId: user.orgId,
             accessToken: token,
             createdAt: user.createdAt,

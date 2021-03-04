@@ -14,6 +14,9 @@ const User = db.sequelize.define("user", {
     orgId: {
         type: Sequelize.STRING
     },
+    short_name: {
+        type: Sequelize.STRING
+    },
     role: {
         type: Sequelize.STRING
     },
