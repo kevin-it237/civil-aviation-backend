@@ -1,5 +1,7 @@
 var router = require("express").Router();
 const SPResponse = require('../models/SP_Response')
+const SurveyProtocol = require('../models/SurveyProtocol')
+const Organisation = require('../models/Organisation')
 
 // Save question response
 router.post("/", (req, res, next) => {
@@ -24,7 +26,8 @@ router.post("/", (req, res, next) => {
         organisationYDMSOrgId: req.body.YDMS_Org_id,
         surveyProtocolYDMSSPId: req.body.YDMS_SP_id,
         questionnaire_response: req.body.response,
-        weight_response: req.body.weight ? req.body.weight : 0
+        weight_response: req.body.weight ? req.body.weight : 0,
+        kpi_id: req.body.kpi
     }
 
     // Check if question is already anwsered
@@ -68,7 +71,31 @@ router.get("/:orgId", (req, res, next) => {
     })
     .catch(err => {
         res.status(500).send({ message: err.message });
-    });;
+    });
+});
+
+// Questions and responses by an org
+router.get("/questions/:orgId", (req, res, next) => {
+
+    const orgId = req.params.orgId
+    
+    Organisation.findAll({
+        attributes: ['YDMS_Org_id', 'short_name'],
+        where: {
+            YDMS_Org_id: orgId
+        },
+        include: [
+            {
+                model: SurveyProtocol,
+                attributes: ['YDMS_SP_id', 'YDMSKPIYDMSKPIsId', 'questionnaire_text'],
+            }
+        ],
+    }).then(responses => {
+        return res.status(201).send(responses);
+    })
+    .catch(err => {
+        res.status(500).send({ message: err.message });
+    });
 });
 
 module.exports = router;
