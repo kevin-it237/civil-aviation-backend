@@ -79,7 +79,7 @@ router.get("/questions/:orgId", (req, res, next) => {
 
     const orgId = req.params.orgId
     
-    Organisation.findAll({
+    Organisation.findOne({
         attributes: ['YDMS_Org_id', 'short_name'],
         where: {
             YDMS_Org_id: orgId
