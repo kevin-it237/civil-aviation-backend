@@ -81,16 +81,23 @@ app.use((error, req, res, next) => {
 
 const io = socketio(server)
 
+let users = []
+
 io.on('connection', function(socket) {
     // const usersOnline = Object.keys(io.engine.clients);
 
     socket.on('new logged user', (data) => {
         const user = JSON.parse(data)
-        io.emit('users online', JSON.stringify(user));
+        if(!users.find(u => u.id === user.id)) {
+            users.push({socketId: socket.id, ...user})
+        }
+        io.emit('users online', JSON.stringify(users));
     })
     
-    socket.on('disconnect', function(){
-      io.emit('user disconnect', JSON.stringify(socket.id));
+    socket.on('disconnect', function() {
+        const newUserList = users.filter(user => user.socketId !== socket.id)
+        users = newUserList
+        io.emit('users online', JSON.stringify(newUserList));
     });
 });
 
