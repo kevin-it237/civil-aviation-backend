@@ -5,7 +5,7 @@ const session = require('express-session')
 const db = require("./api/models");
 const http = require('http');
 const path = require('path');
-
+const socketio = require('socket.io');
 
 const SPResponse = require('./api/models/SP_Response')
 
@@ -79,8 +79,22 @@ app.use((error, req, res, next) => {
     })
 })
 
+const io = socketio(server)
+
+io.on('connection', function(socket) {
+    // const usersOnline = Object.keys(io.engine.clients);
+
+    socket.on('new logged user', (data) => {
+        const user = JSON.parse(data)
+        io.emit('users online', JSON.stringify(user));
+    })
+    
+    socket.on('disconnect', function(){
+      io.emit('user disconnect', JSON.stringify(socket.id));
+    });
+});
 
 // Start the app
 server.listen(process.env.PORT || 5000, function() {
-    console.log("Server started on PORT")
+    console.log("Server started on PORT: "+ 5000 || process.env.PORT)
 })
