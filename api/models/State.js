@@ -40,6 +40,8 @@ State.init({
     ICAO_code: {
         type: Sequelize.STRING
     },
-}, { sequelize });
+}, 
+{ sequelize,
+    modelName: 'states' });
 
 module.exports = State

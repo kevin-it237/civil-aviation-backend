@@ -10,7 +10,9 @@ const socketio = require('socket.io');
 const SPResponse = require('./api/models/SP_Response')
 
 // Connect to  mysql db 
-db.sequelize.sync({ alter: true });
+if(process.env.NODE_ENV !== 'production') {
+    db.sequelize.sync({ alter: true });
+}
 
 
 require('dotenv').config();
