@@ -87,7 +87,7 @@ router.get("/questions/:orgId", (req, res, next) => {
         include: [
             {
                 model: SurveyProtocol,
-                attributes: ['YDMS_SP_id', 'YDMSKPIYDMSKPIsId', 'questionnaire_text'],
+                attributes: ['YDMS_SP_id', 'ydmsKpiYDMSKPIsId', 'questionnaire_text'],
             }
         ],
     }).then(responses => {
