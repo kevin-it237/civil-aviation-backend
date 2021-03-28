@@ -8,6 +8,7 @@ const path = require('path');
 const socketio = require('socket.io');
 
 const SPResponse = require('./api/models/SP_Response')
+const Instrument = require('./api/models/Instrument')
 
 // Connect to  mysql db 
 if(process.env.NODE_ENV !== 'production') {
