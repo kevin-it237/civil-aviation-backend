@@ -8,7 +8,6 @@ const path = require('path');
 const socketio = require('socket.io');
 
 const SPResponse = require('./api/models/SP_Response')
-const Instrument = require('./api/models/Instrument')
 
 // Connect to  mysql db 
 if(process.env.NODE_ENV !== 'production') {
@@ -53,6 +52,7 @@ const questionnaireRoutes = require('./api/routes/surveyProtocolRoutes');
 const spResponsesRoutes = require('./api/routes/spResponseRoutes');
 const orgsRoutes = require('./api/routes/orgsRoutes');
 const usersRoutes = require('./api/routes/usersRoutes');
+const eLibraryRoutes = require('./api/routes/eLibraryRoutes');
 
 /* App Routes */
 app.use('/api/auth', authRoutes);
@@ -62,6 +62,7 @@ app.use('/api/questionnaire', questionnaireRoutes);
 app.use('/api/response', spResponsesRoutes);
 app.use('/api/organisations', orgsRoutes);
 app.use('/api/users', usersRoutes);
+app.use('/api/libraries', eLibraryRoutes);
 
 app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));

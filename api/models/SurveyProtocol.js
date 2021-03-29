@@ -21,6 +21,9 @@ const SurveyProtocol = db.sequelize.define("survey_protocol", {
     SP_checklist_id: {
         type: Sequelize.STRING
     },
+    YDMS_Inst_id: {
+        type: Sequelize.STRING
+    },
 });
 
 YDMS_KPIs.hasMany(SurveyProtocol);
