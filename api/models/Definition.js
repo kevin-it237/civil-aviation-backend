@@ -11,7 +11,7 @@ const Definition = db.sequelize.define("definition", {
         type: Sequelize.STRING
     },
     definition: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
     }
 }); 
 
