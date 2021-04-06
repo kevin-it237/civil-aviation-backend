@@ -48,23 +48,30 @@ router.get("/instruments", (req, res, next) => {
 });
 
 // Get all instruments, articles, and provision
-router.get("/article/:articleId", (req, res, next) => {
-    let articleId = req.params.articleId
-    Article.findOne({
+router.get("/provision/:instId/:provisionNumber", (req, res, next) => {
+    const provisionNumber = req.params.provisionNumber
+    const instId = req.params.instId
+    
+    Provision.findOne({
         where: {
-            YDMS_Art_id: {
-                [Op.eq]: articleId
+            provision_number: {
+                [Op.eq]: provisionNumber
             }
         },
         include: [
             {
-                model: Provision,
-                where: {}
+                model: Article,
+                include: [
+                    {
+                        model: Instrument,
+                        where: {
+                            YDMS_Inst_id: {
+                                [Op.eq]: instId
+                            }
+                        }
+                    }
+                ]
             },
-            {
-                model: Instrument,
-                where: {}
-            }
         ],
     })
     .then(data => {
