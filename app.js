@@ -53,6 +53,7 @@ const spResponsesRoutes = require('./api/routes/spResponseRoutes');
 const orgsRoutes = require('./api/routes/orgsRoutes');
 const usersRoutes = require('./api/routes/usersRoutes');
 const eLibraryRoutes = require('./api/routes/eLibraryRoutes');
+const commentsRoutes = require('./api/routes/commentsRoutes');
 
 /* App Routes */
 app.use('/api/auth', authRoutes);
@@ -63,6 +64,7 @@ app.use('/api/response', spResponsesRoutes);
 app.use('/api/organisations', orgsRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/libraries', eLibraryRoutes);
+app.use('/api/comments', commentsRoutes);
 
 app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
